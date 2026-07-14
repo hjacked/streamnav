@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="kftv_black">#050505</color>
+    <color name="kftv_surface">#17130A</color>
+    <color name="kftv_gold">#FFD21A</color>
+    <color name="kftv_metallic_gold">#D4AF37</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
