@@ -47,12 +47,18 @@ function hmacSign(core, secret) {
 }
 
 function verifyKey(key, secret) {
-  const k = (key || "").trim().toUpperCase();
+  const k = String(key || "").replace(/-/g, "").trim().toUpperCase();
   if (k.length !== TOTAL_LEN) return false;
   if (![...k].every(c => ALPHABET.includes(c))) return false;
   if (!k.startsWith(PREFIX)) return false;
   const core = k.slice(0, TOTAL_LEN - SIGN_LEN);
   return k.slice(TOTAL_LEN - SIGN_LEN) === hmacSign(core, secret);
+}
+
+function parseBody(req) {
+  if (!req.body) return {};
+  if (typeof req.body === "object") return req.body;
+  return JSON.parse(req.body);
 }
 
 function kvEnabled() {
@@ -95,9 +101,9 @@ async function revokeKey(key) {
 
 async function handleActivate(req, res, secret) {
   let body;
-  try { body = JSON.parse(req.body || "{}"); } catch { return res.status(400).json({ valid: false, reason: "bad-json" }); }
-  const key = body.key;
-  const deviceId = body.deviceId;
+  try { body = parseBody(req); } catch { return res.status(400).json({ valid: false, reason: "bad-json" }); }
+  const key = String(body.key || "").replace(/-/g, "").trim().toUpperCase();
+  const deviceId = String(body.deviceId || "").trim();
 
   if (!verifyKey(key, secret)) return res.status(200).json({ valid: false, reason: "invalid-key" });
   if (await isRevoked(key)) return res.status(200).json({ valid: false, reason: "revoked" });
@@ -119,8 +125,8 @@ async function handleRevoke(req, res, secret) {
     return res.status(401).json({ revoked: false, reason: "unauthorized" });
   }
   let body;
-  try { body = JSON.parse(req.body || "{}"); } catch { return res.status(400).json({ revoked: false, reason: "bad-json" }); }
-  const key = body.key;
+  try { body = parseBody(req); } catch { return res.status(400).json({ revoked: false, reason: "bad-json" }); }
+  const key = String(body.key || "").replace(/-/g, "").trim().toUpperCase();
   if (!verifyKey(key, secret)) return res.status(200).json({ revoked: false, reason: "invalid-key" });
   await revokeKey(key);
   return res.status(200).json({ revoked: true });

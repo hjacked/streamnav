@@ -19,3 +19,4 @@ local.properties
 /app/release/
 /FULL-StreamNav.apk
 /iamhjed
+*.ps1

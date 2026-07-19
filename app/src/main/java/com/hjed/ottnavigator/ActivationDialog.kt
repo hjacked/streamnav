@@ -144,17 +144,25 @@ fun ActivationDialog(
             TextButton(
                 enabled = !verifying,
                 onClick = {
-                    val normalized = keyInput.replace("-", "").trim()
+                    val normalized = LicenseManager.normalizeKey(keyInput)
                     scope.launch {
                         verifying = true
                         error = null
-                        val ok = LicenseManager.validateKeyWithServer(normalized, deviceId)
+                        val result = LicenseManager.validateKeyWithServer(normalized, deviceId)
                         verifying = false
-                        if (ok) {
+                        if (result.success) {
                             LicenseManager.activate(context, normalized)
                             onActivated()
                         } else {
-                            error = "Invalid or already-used activation key. Please check and try again."
+                            error = when (result.reason) {
+                                "invalid-format" -> "Enter the complete 24-character activation key."
+                                "invalid-key" -> "This activation key is invalid."
+                                "revoked" -> "This activation key has been revoked."
+                                "device-limit" -> "This key has reached its device limit."
+                                "server-misconfig" -> "The activation server is not configured yet."
+                                "network-error" -> "Could not reach the activation server. Check your connection."
+                                else -> "Activation failed. Please try again later."
+                            }
                         }
                     }
                 },

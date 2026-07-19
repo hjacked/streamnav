@@ -19,7 +19,6 @@ android {
 
         versionCode = 376
         versionName = "1.1.0"
-        buildConfigField("String", "LICENSE_SECRET", "\"\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

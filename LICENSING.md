@@ -10,32 +10,33 @@ and how to tune the trial length.
 - For 15 days the app is fully usable with **no notifications**. When the trial ends and
   no valid key is stored, a **mandatory, non-dismissable** `ActivationDialog` appears over
   a dimmed screen. The user cannot use the app until a valid key is entered.
-- A valid key is HMAC-SHA256 signed with a shared secret, so it cannot be forged without
-  the secret. The app verifies the format locally and confirms with the server.
+- A valid key is HMAC-SHA256 signed with a server-side secret, so it cannot be forged
+  without the secret. The app checks presentation locally and the server is the only
+  authority that verifies the signature.
 
 ## Key format
 
 `STN` + 17 random alphanumerics + 4-char base36 HMAC signature = 24 characters.
 Example: `STNWDHYKTNQH0SBCA63FQISR`
 
-Defined in `app/src/main/java/com/hjed/ottnavigator/ActivationKeyGenerator.kt`
-and verified in `app/src/main/java/com/hjed/ottnavigator/LicenseManager.kt`.
+The format check is in `LicenseManager.kt`; the HMAC signature is verified only by
+`api/activate.js`.
 
 ## Generating activation keys (vendor side)
 
-Keys are minted offline with `mint_activation_keys.ps1`. Keep this script and the
-secret private — never ship it inside the app.
+Keys must be minted offline with the private HMAC minting tool. Keep both the tool and
+secret outside this repository and never ship either one inside the app.
 
 ```powershell
 $env:LICENSE_SECRET = "your-strong-secret"
-pwsh -File mint_activation_keys.ps1 -Count 5 -Secret $env:LICENSE_SECRET
+pwsh -File <private-mint-script> -Count 5 -Secret $env:LICENSE_SECRET
 ```
 
 Give one key per paying customer. The key is signed with `LICENSE_SECRET`, so only keys
 you mint are accepted by the server.
 
-> The app's `BuildConfig.LICENSE_SECRET` is left empty on purpose. The app only checks
-> key *format*; the authoritative check is server-side, so the real secret stays off-device.
+> The APK contains no `LICENSE_SECRET`. The authoritative check is server-side, so the
+> real secret stays off-device.
 
 ## Activation server (`api/activate.js`)
 
@@ -106,7 +107,8 @@ code changes are needed — the duration flows through `TRIAL_DURATION_MS` autom
 ## Files
 
 - `app/src/main/java/com/hjed/ottnavigator/LicenseManager.kt` — trial + activation state, server validation.
-- `app/src/main/java/com/hjed/ottnavigator/ActivationKeyGenerator.kt` — HMAC key generator/verifier (in-app format check).
 - `app/src/main/java/com/hjed/ottnavigator/ActivationDialog.kt` — mandatory activation UI (dimmed, non-dismissable).
-- `mint_activation_keys.ps1` — vendor key minting tool (private).
 - `api/activate.js` — Vercel activation + revocation server.
+
+Private key-minting scripts are intentionally ignored by Git and are not part of the
+deployed application or activation server.
