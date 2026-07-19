@@ -1,22 +1,17 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.idea/
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+# Keep this repository deployment-only. Everything is private by default.
+*
 
-.vercel
-/app/release/
-/FULL-StreamNav.apk
-/iamhjed
-*.ps1
+# Public deployment configuration and static site.
+!.gitignore
+!index.html
+!vercel.json
+!update.json
+!package.json
+
+# Activation server required by /api/activate.
+!api/
+!api/**
+
+# Public APK/update artifacts.
+!stream/
+!stream/**
