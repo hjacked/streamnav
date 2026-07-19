@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/update.json", "destination": "/update.json" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
