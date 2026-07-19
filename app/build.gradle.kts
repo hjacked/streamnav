@@ -17,8 +17,9 @@ android {
         minSdk = 24
         targetSdk = 36
 
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 376
+        versionName = "1.1.0"
+        buildConfigField("String", "LICENSE_SECRET", "\"\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

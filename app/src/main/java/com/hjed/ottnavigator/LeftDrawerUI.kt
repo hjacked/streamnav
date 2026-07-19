@@ -18,7 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -146,12 +149,9 @@ fun LeftDrawerUI(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            TabLabel(
                 text = "Playlists",
-                color = if (currentMenuMode == LeftMenuMode.PLAYLISTS) MotifFocusNeon else Color.Gray,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
+                isActive = currentMenuMode == LeftMenuMode.PLAYLISTS,
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
@@ -159,12 +159,9 @@ fun LeftDrawerUI(
                         onMenuModeChange(LeftMenuMode.PLAYLISTS)
                     }
             )
-            Text(
+            TabLabel(
                 text = "Settings",
-                color = if (currentMenuMode == LeftMenuMode.SETTINGS) MotifFocusNeon else Color.Gray,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
+                isActive = currentMenuMode == LeftMenuMode.SETTINGS,
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
@@ -172,12 +169,9 @@ fun LeftDrawerUI(
                         onMenuModeChange(LeftMenuMode.SETTINGS)
                     }
             )
-            Text(
+            TabLabel(
                 text = "Channels",
-                color = if (currentMenuMode == LeftMenuMode.CHANNELS) MotifFocusNeon else Color.Gray,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
+                isActive = currentMenuMode == LeftMenuMode.CHANNELS,
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
@@ -307,7 +301,7 @@ fun LeftDrawerUI(
                                 text = if (searchQuery.isBlank()) "No channels available" else "No matching channels",
                                 color = MotifFocusNeon,
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
+                                fontWeight = FontWeight.Medium,
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
                             Text(
@@ -332,18 +326,26 @@ fun LeftDrawerUI(
                     val isCurrentlyPlaying = selectedChannel == channel
                     val isFocused = isChannelListFocused && index == focusedChannelIndex
 
+                    val accentColor = if (isFocused) MotifFocusNeon else if (isCurrentlyPlaying) MotifAccent else Color.Transparent
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 4.dp)
+                            .padding(vertical = 3.dp)
+                            .drawBehind {
+                                if (accentColor != Color.Transparent) {
+                                    drawLine(
+                                        color = accentColor,
+                                        start = Offset(0f, size.height * 0.15f),
+                                        end = Offset(0f, size.height * 0.85f),
+                                        strokeWidth = 2.5.dp.toPx(),
+                                        cap = StrokeCap.Round
+                                    )
+                                }
+                            }
                             .background(
-                                color = if (isFocused) MotifSurface else if (isCurrentlyPlaying) MotifHighlightPlaying else Color.Transparent,
-                                shape = RoundedCornerShape(6.dp)
-                            )
-                            .border(
-                                width = if (isFocused) 2.dp else 0.dp,
-                                color = if (isFocused) MotifFocusNeon else Color.Transparent,
-                                shape = RoundedCornerShape(6.dp)
+                                color = if (isFocused) MotifFocusNeon.copy(alpha = 0.06f) else Color.Transparent,
+                                shape = RoundedCornerShape(4.dp)
                             )
                             .pointerInput(channel.url) {
                                 detectTapGestures {
@@ -351,7 +353,7 @@ fun LeftDrawerUI(
                                     onChannelSelected(channel)
                                 }
                             }
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .padding(start = 10.dp, end = 8.dp, top = 6.dp, bottom = 6.dp)
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -361,34 +363,34 @@ fun LeftDrawerUI(
                                 AsyncImage(
                                     model = ImageRequest.Builder(LocalContext.current)
                                         .data(channel.logoUrl)
-                                        .size(36, 36)
+                                        .size(32, 32)
                                         .crossfade(true)
                                         .build(),
                                     contentDescription = "Logo",
                                     modifier = Modifier
-                                        .size(36.dp)
-                                        .background(Color(0x22FFFFFF), shape = RoundedCornerShape(4.dp))
+                                        .size(32.dp)
+                                        .background(Color(0x15FFFFFF), shape = RoundedCornerShape(4.dp))
                                         .padding(2.dp),
                                     contentScale = ContentScale.Fit
                                 )
-                                Spacer(modifier = Modifier.width(12.dp))
+                                Spacer(modifier = Modifier.width(10.dp))
                             } else {
                                 Box(
                                     modifier = Modifier
-                                        .size(36.dp)
-                                        .background(Color(0x44FFFFFF), shape = RoundedCornerShape(4.dp)),
+                                        .size(32.dp)
+                                        .background(Color(0x22FFFFFF), shape = RoundedCornerShape(4.dp)),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text("TV", fontSize = 12.sp, color = Color.LightGray)
+                                    Text("TV", fontSize = 10.sp, color = Color.Gray)
                                 }
-                                Spacer(modifier = Modifier.width(12.dp))
+                                Spacer(modifier = Modifier.width(10.dp))
                             }
                             Text(
                                 text = channel.name,
-                                fontSize = if (layout.isCompact) 16.sp else 18.sp,
+                                fontSize = if (layout.isCompact) 14.sp else 15.sp,
                                 maxLines = 1,
-                                color = if (isFocused) MotifFocusNeon else Color.White,
-                                fontWeight = if (isFocused || isCurrentlyPlaying) FontWeight.Bold else FontWeight.Normal
+                                color = if (isFocused) MotifFocusNeon else if (isCurrentlyPlaying) Color.White else Color.White.copy(alpha = 0.85f),
+                                fontWeight = if (isFocused) FontWeight.Medium else FontWeight.Normal
                             )
                         }
                     }
@@ -409,7 +411,7 @@ fun LeftDrawerUI(
                     text = playlistName,
                     color = MotifFocusNeon,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                 )
 
@@ -422,6 +424,8 @@ fun LeftDrawerUI(
                     itemsIndexed(settingsItems) { index, item ->
                         var isFocusedItem by remember { mutableStateOf(false) }
                         val isCategoryActive = selectedCategory == item.title
+
+                        val accentColor = if (isFocusedItem) MotifFocusNeon else if (isCategoryActive) MotifAccent else Color.Transparent
 
                         Row(
                             modifier = Modifier
@@ -445,34 +449,40 @@ fun LeftDrawerUI(
                                     } else false
                                 }
                                 .focusable()
+                                .drawBehind {
+                                    if (accentColor != Color.Transparent) {
+                                        drawLine(
+                                            color = accentColor,
+                                            start = Offset(0f, size.height * 0.15f),
+                                            end = Offset(0f, size.height * 0.85f),
+                                            strokeWidth = 2.5.dp.toPx(),
+                                            cap = StrokeCap.Round
+                                        )
+                                    }
+                                }
                                 .background(
-                                    color = if (isFocusedItem) MotifSurface else if (isCategoryActive) MotifAccentMuted else Color.Transparent,
-                                    shape = RoundedCornerShape(6.dp)
-                                )
-                                .border(
-                                    width = if (isFocusedItem) 2.dp else 0.dp,
-                                    color = if (isFocusedItem) MotifFocusNeon else Color.Transparent,
-                                    shape = RoundedCornerShape(6.dp)
+                                    color = if (isFocusedItem) MotifFocusNeon.copy(alpha = 0.06f) else Color.Transparent,
+                                    shape = RoundedCornerShape(4.dp)
                                 )
                                 .clickable {
                                     onUserInteraction()
                                     onCategorySelected(item.title)
                                 }
-                                .padding(horizontal = 12.dp, vertical = 14.dp),
+                                .padding(start = 14.dp, end = 12.dp, top = 12.dp, bottom = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
                                 imageVector = item.icon,
                                 contentDescription = item.title,
-                                tint = if (isFocusedItem) MotifFocusNeon else if (isCategoryActive) MotifAccent else Color.White,
-                                modifier = Modifier.size(20.dp)
+                                tint = if (isFocusedItem) MotifFocusNeon else if (isCategoryActive) MotifAccent else Color.White.copy(alpha = 0.7f),
+                                modifier = Modifier.size(18.dp)
                             )
-                            Spacer(modifier = Modifier.width(16.dp))
+                            Spacer(modifier = Modifier.width(14.dp))
                             Text(
                                 text = item.title,
-                                color = if (isFocusedItem) MotifFocusNeon else if (isCategoryActive) Color.White else Color.LightGray,
-                                fontSize = 16.sp,
-                                fontWeight = if (isFocusedItem || isCategoryActive) FontWeight.Bold else FontWeight.Normal,
+                                color = if (isFocusedItem) MotifFocusNeon else if (isCategoryActive) Color.White else Color.White.copy(alpha = 0.75f),
+                                fontSize = 14.sp,
+                                fontWeight = if (isFocusedItem || isCategoryActive) FontWeight.Medium else FontWeight.Normal,
                                 maxLines = 1
                             )
                         }
@@ -494,6 +504,36 @@ fun LeftDrawerUI(
 private enum class ChannelFocusScrollMode {
     JumpToItem,
     KeepFocusMoving
+}
+
+@Composable
+private fun TabLabel(
+    text: String,
+    isActive: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = text,
+            color = if (isActive) Color.White else Color.White.copy(alpha = 0.4f),
+            fontSize = 13.sp,
+            fontWeight = if (isActive) FontWeight.Medium else FontWeight.Normal,
+            maxLines = 1
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Box(
+            modifier = Modifier
+                .width(if (isActive) 16.dp else 0.dp)
+                .height(1.5.dp)
+                .background(
+                    if (isActive) MotifFocusNeon else Color.Transparent,
+                    RoundedCornerShape(1.dp)
+                )
+        )
+    }
 }
 
 private suspend fun LazyListState.scrollToKeepItemVisible(index: Int) {

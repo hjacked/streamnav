@@ -1,6 +1,5 @@
 package com.hjed.ottnavigator.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -14,17 +13,17 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = NeonCyan80,
     secondary = PlasmaViolet80,
-    tertiary = SignalLime80,
-    background = KinsBlack,
-    surface = KinsSurface
+    tertiary = Emerald80,
+    background = StreamBlack,
+    surface = StreamSurface
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = NeonCyan40,
     secondary = PlasmaViolet40,
-    tertiary = SignalLime40,
-    background = KinsBlack,
-    surface = KinsSurface
+    tertiary = Emerald40,
+    background = StreamBlack,
+    surface = StreamSurface
 )
 
 @Composable

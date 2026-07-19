@@ -24,7 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.font.FontWeight
@@ -68,15 +71,15 @@ fun ExitConfirmationDialog(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .width(layout.dialogWidth)
-                .background(MotifSurface, shape = RoundedCornerShape(8.dp))
-                .border(1.dp, Color(0x22FFFFFF), shape = RoundedCornerShape(8.dp))
+                .background(MotifSurface, shape = RoundedCornerShape(10.dp))
+                .border(0.5.dp, Color(0x15FFFFFF), shape = RoundedCornerShape(10.dp))
                 .padding(if (layout.isCompact) 20.dp else 28.dp)
         ) {
             Text(
                 text = "Exit StreamNav?",
                 color = Color.White,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -153,8 +156,8 @@ private fun ExitDialogActionButton(
                 }
             }
             .border(
-                width = if (isActive) 2.dp else 1.dp,
-                color = if (isActive) MotifFocusNeon else Color(0x33FFFFFF),
+                width = if (isActive) 1.dp else 0.5.dp,
+                color = if (isActive) MotifFocusNeon.copy(alpha = 0.5f) else Color(0x1AFFFFFF),
                 shape = RoundedCornerShape(8.dp)
             )
             .clickable { onClick() },
@@ -163,8 +166,8 @@ private fun ExitDialogActionButton(
         Text(
             text = text,
             color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp
         )
     }
 }
@@ -227,7 +230,14 @@ fun RightSettingsDrawer(
             .fillMaxHeight()
             .width(drawerWidth)
             .background(MotifDrawerGlass)
-            .border(1.dp, Color(0x22FFFFFF))
+            .drawBehind {
+                drawLine(
+                    color = MotifFocusNeon.copy(alpha = 0.1f),
+                    start = Offset(0f, 0f),
+                    end = Offset(0f, size.height),
+                    strokeWidth = 0.5.dp.toPx()
+                )
+            }
             .padding(vertical = if (compact) 16.dp else 20.dp)
             .focusRequester(optionsFocusRequester)
             .onPreviewKeyEvent { keyEvent ->
@@ -252,8 +262,8 @@ fun RightSettingsDrawer(
                 Text(
                     text = selectedChannel?.name ?: "Playback",
                     color = Color.White,
-                    fontSize = if (compact) 16.sp else 18.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = if (compact) 15.sp else 17.sp,
+                    fontWeight = FontWeight.Medium,
                     maxLines = 1
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -360,14 +370,20 @@ private fun RightDrawerActionRow(
                 onUserInteraction()
                 action.onClick()
             }
+            .drawBehind {
+                if (isItemFocused) {
+                    drawLine(
+                        color = MotifFocusNeon,
+                        start = Offset(0f, size.height * 0.15f),
+                        end = Offset(0f, size.height * 0.85f),
+                        strokeWidth = 2.5.dp.toPx(),
+                        cap = StrokeCap.Round
+                    )
+                }
+            }
             .background(
-                color = if (isItemFocused) MotifSurface else Color.Transparent,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .border(
-                width = if (isItemFocused) 2.dp else 1.dp,
-                color = if (isItemFocused) MotifFocusNeon else Color.Transparent,
-                shape = RoundedCornerShape(8.dp)
+                color = if (isItemFocused) MotifFocusNeon.copy(alpha = 0.06f) else Color.Transparent,
+                shape = RoundedCornerShape(4.dp)
             )
             .padding(horizontal = 14.dp, vertical = if (compact) 12.dp else 14.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -382,8 +398,8 @@ private fun RightDrawerActionRow(
         Text(
             text = action.title,
             color = if (action.enabled) tintColor else Color.Gray,
-            fontSize = if (compact) 15.sp else 16.sp,
-            fontWeight = if (isItemFocused) FontWeight.Bold else FontWeight.Normal,
+            fontSize = if (compact) 14.sp else 15.sp,
+            fontWeight = if (isItemFocused) FontWeight.Medium else FontWeight.Normal,
             maxLines = 1
         )
     }
@@ -397,8 +413,8 @@ private fun StreamDetails(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(MotifAccentMuted.copy(alpha = 0.18f), RoundedCornerShape(8.dp))
-            .border(1.dp, Color(0x22FFFFFF), RoundedCornerShape(8.dp))
+            .background(MotifAccentMuted.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
+            .border(0.5.dp, Color(0x0FFFFFFF), RoundedCornerShape(8.dp))
             .padding(horizontal = 14.dp, vertical = 12.dp)
     ) {
         DetailText("Group", selectedChannel?.groupTitle ?: "Unknown")

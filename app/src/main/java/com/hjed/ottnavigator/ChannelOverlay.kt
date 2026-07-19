@@ -34,7 +34,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -55,9 +62,9 @@ fun StreamNavLogoOverlay(visible: Boolean) {
     ) {
         Text(
             text = "StreamNav",
-            color = Color.White.copy(alpha = 0.35f),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+            color = Color.White.copy(alpha = 0.2f),
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Light
         )
     }
 }
@@ -81,16 +88,26 @@ fun PlaybackControlsOverlay(visible: Boolean) {
             Column(
                 modifier = Modifier
                     .width(if (layout.isCompact) layout.dialogWidth else 440.dp)
-                    .background(Color.Black.copy(alpha = 0.68f), RoundedCornerShape(8.dp))
-                    .border(1.dp, MotifFocusNeon.copy(alpha = 0.35f), RoundedCornerShape(8.dp))
+                    .background(MotifBackground.copy(alpha = 0.85f), RoundedCornerShape(10.dp))
+                    .drawBehind {
+                        val strokeWidth = 0.5.dp.toPx()
+                        val halfStroke = strokeWidth / 2
+                        drawRoundRect(
+                            color = MotifFocusNeon.copy(alpha = 0.15f),
+                            topLeft = Offset(halfStroke, halfStroke),
+                            size = Size(size.width - strokeWidth, size.height - strokeWidth),
+                            cornerRadius = CornerRadius(10.dp.toPx()),
+                            style = Stroke(width = strokeWidth)
+                        )
+                    }
                     .padding(horizontal = if (layout.isCompact) 14.dp else 18.dp, vertical = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(if (layout.isCompact) 8.dp else 10.dp)
             ) {
                 Text(
                     text = "Playback Controls",
-                    color = MotifFocusNeon,
-                    fontSize = if (layout.isCompact) 16.sp else 18.sp,
-                    fontWeight = FontWeight.Bold
+                    color = MotifFocusNeon.copy(alpha = 0.85f),
+                    fontSize = if (layout.isCompact) 14.sp else 16.sp,
+                    fontWeight = FontWeight.Medium
                 )
 
                 ControlHelpRow(Icons.Default.KeyboardArrowUp, "Up / Channel+", "Previous channel")
@@ -119,22 +136,22 @@ private fun ControlHelpRow(
         Icon(
             imageVector = icon,
             contentDescription = input,
-            tint = MotifFocusNeon.copy(alpha = 0.92f),
-            modifier = Modifier.width(24.dp)
+            tint = MotifFocusNeon.copy(alpha = 0.6f),
+            modifier = Modifier.width(20.dp)
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = input,
-            color = Color.White,
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Bold,
+            color = Color.White.copy(alpha = 0.85f),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
             modifier = Modifier.width(120.dp),
             maxLines = 1
         )
         Text(
             text = action,
-            color = Color.White.copy(alpha = 0.76f),
-            fontSize = 13.sp,
+            color = Color.White.copy(alpha = 0.55f),
+            fontSize = 12.sp,
             maxLines = 1
         )
     }
@@ -221,9 +238,23 @@ private fun ChannelTextCard(
     Box(
         modifier = Modifier
             .width(cardWidth)
-            .background(MotifDrawerGlass.copy(alpha = 0.72f), RoundedCornerShape(8.dp))
-            .border(1.dp, MotifFocusNeon.copy(alpha = 0.72f), RoundedCornerShape(8.dp))
-            .padding(horizontal = if (compact) 14.dp else 20.dp, vertical = if (compact) 12.dp else 16.dp)
+            .background(MotifBackground.copy(alpha = 0.82f), RoundedCornerShape(10.dp))
+            .drawBehind {
+                val strokeWidth = 0.5.dp.toPx()
+                val halfStroke = strokeWidth / 2
+                drawRoundRect(
+                    brush = Brush.linearGradient(
+                        colors = listOf(MotifFocusNeon.copy(alpha = 0.35f), MotifAccent.copy(alpha = 0.2f)),
+                        start = Offset.Zero,
+                        end = Offset(size.width, size.height)
+                    ),
+                    topLeft = Offset(halfStroke, halfStroke),
+                    size = Size(size.width - strokeWidth, size.height - strokeWidth),
+                    cornerRadius = CornerRadius(10.dp.toPx()),
+                    style = Stroke(width = strokeWidth)
+                )
+            }
+            .padding(horizontal = if (compact) 14.dp else 18.dp, vertical = if (compact) 10.dp else 14.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -231,36 +262,24 @@ private fun ChannelTextCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "",
-                    color = MotifFocusNeon,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = channelName,
-                    color = MotifFocusNeon,
-                    fontSize = if (compact) 15.sp else 18.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White.copy(alpha = 0.9f),
+                    fontSize = if (compact) 14.sp else 16.sp,
+                    fontWeight = FontWeight.Normal,
                     maxLines = 1
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "",
-                    color = MotifFocusNeon,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Spacer(modifier = Modifier.height(2.dp))
             }
 
             Spacer(modifier = Modifier.width(12.dp))
 
             Text(
                 text = displayIndex.toString(),
-                color = MotifFocusNeon,
-                fontSize = if (compact) 42.sp else 60.sp,
-                fontWeight = FontWeight.Bold,
+                color = MotifFocusNeon.copy(alpha = 0.7f),
+                fontSize = if (compact) 36.sp else 48.sp,
+                fontWeight = FontWeight.Thin,
                 textAlign = TextAlign.End
             )
         }

@@ -61,6 +61,7 @@ fun StreamNavApp(
     var showRightMenu by remember { mutableStateOf(false) }
     var showExitDialog by remember { mutableStateOf(false) }
     var showUpdateDialog by remember { mutableStateOf(false) }
+    var showActivationDialog by remember { mutableStateOf(false) }
     var latestVersionUrl by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("All channels") }
     var showChannelOverlay by remember { mutableStateOf(false) }
@@ -97,6 +98,11 @@ fun StreamNavApp(
     }
 
     LaunchedEffect(Unit) {
+        LicenseManager.ensureTrialStarted(context)
+        if (LicenseManager.isActivationRequired(context)) {
+            showActivationDialog = true
+        }
+
         val latest = UpdateManager.getLatestVersion()
         if (latest != null && latest.versionCode > BuildConfig.VERSION_CODE) {
             latestVersionUrl = latest.downloadUrl
@@ -308,6 +314,9 @@ fun StreamNavApp(
             showUpdateDialog -> {
             }
 
+            showActivationDialog -> {
+            }
+
             showExitDialog -> {
             }
 
@@ -318,6 +327,16 @@ fun StreamNavApp(
                 showExitDialog = true
             }
         }
+    }
+
+    if (showActivationDialog) {
+        ActivationDialog(
+            context = context,
+            onActivated = {
+                // ActivationDialog already persisted the key via LicenseManager.
+                showActivationDialog = false
+            }
+        )
     }
 
     if (showUpdateDialog) {

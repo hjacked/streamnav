@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+
+    <!-- Background -->
+    <path
+        android:pathData="M0,0h320v180H0z"
+        android:fillColor="#020508" />
+
+    <!-- Ambient glow -->
+    <path
+        android:pathData="M160,90m-80,0a80,80,0,1,1,160,0a80,80,0,1,1,-160,0"
+        android:fillColor="#071323" />
+
+    <!-- Outer ring -->
+    <path
+        android:pathData="M160,90m-36,0a36,36,0,1,1,72,0a36,36,0,1,1,-72,0"
+        android:strokeColor="#22D3EE"
+        android:strokeWidth="1"
+        android:fillColor="#00000000" />
+
+    <!-- North needle — Cyan -->
+    <path
+        android:pathData="M160,54 L172,86 L160,80 L148,86 Z"
+        android:fillColor="#22D3EE" />
+
+    <!-- South needle — Violet -->
+    <path
+        android:pathData="M160,126 L172,94 L160,100 L148,94 Z"
+        android:fillColor="#8B5CF6" />
+
+    <!-- Center cutout -->
+    <path
+        android:pathData="M160,90m-9,0a9,9,0,1,1,18,0a9,9,0,1,1,-18,0"
+        android:fillColor="#020508" />
+
+    <!-- Center ring -->
+    <path
+        android:pathData="M160,90m-9,0a9,9,0,1,1,18,0a9,9,0,1,1,-18,0"
+        android:strokeColor="#22D3EE"
+        android:strokeWidth="0.8"
+        android:fillColor="#00000000" />
+
+    <!-- Center dot -->
+    <path
+        android:pathData="M160,90m-3,0a3,3,0,1,1,6,0a3,3,0,1,1,-6,0"
+        android:fillColor="#67E8F9" />
+
+    <!-- App name: "StreamNav" — approximated with a subtle line beneath the mark -->
+    <!-- Left accent line -->
+    <path
+        android:pathData="M60,145 L145,145"
+        android:strokeColor="#22D3EE"
+        android:strokeWidth="0.5"
+        android:fillColor="#00000000" />
+
+    <!-- Right accent line -->
+    <path
+        android:pathData="M175,145 L260,145"
+        android:strokeColor="#8B5CF6"
+        android:strokeWidth="0.5"
+        android:fillColor="#00000000" />
+
+    <!-- Center diamond accent between lines -->
+    <path
+        android:pathData="M160,142 L163,145 L160,148 L157,145 Z"
+        android:fillColor="#22D3EE" />
+
+    <!-- Orbital dot — top right -->
+    <path
+        android:pathData="M192,62m-1.5,0a1.5,1.5,0,1,1,3,0a1.5,1.5,0,1,1,-3,0"
+        android:fillColor="#22D3EE" />
+
+    <!-- Orbital dot — bottom left -->
+    <path
+        android:pathData="M128,118m-1.5,0a1.5,1.5,0,1,1,3,0a1.5,1.5,0,1,1,-3,0"
+        android:fillColor="#8B5CF6" />
+</vector>

@@ -2,13 +2,16 @@ package com.hjed.ottnavigator.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// Light tones (dark theme foreground)
 val NeonCyan80 = Color(0xFF67E8F9)
 val PlasmaViolet80 = Color(0xFFC4B5FD)
-val SignalLime80 = Color(0xFF86EFAC)
+val Emerald80 = Color(0xFF6EE7B7)
 
-val NeonCyan40 = Color(0xFF0891B2)
-val PlasmaViolet40 = Color(0xFF7C3AED)
-val SignalLime40 = Color(0xFF16A34A)
+// Saturated tones (light theme / accents)
+val NeonCyan40 = Color(0xFF22D3EE)
+val PlasmaViolet40 = Color(0xFF8B5CF6)
+val Emerald40 = Color(0xFF10B981)
 
-val KinsBlack = Color(0xFF02050D)
-val KinsSurface = Color(0xFF071323)
+// Canvas
+val StreamBlack = Color(0xFF020508)
+val StreamSurface = Color(0xFF071323)

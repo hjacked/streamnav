@@ -249,8 +249,8 @@ private fun StreamFailureNotification(
     Row(
         modifier = Modifier
             .widthIn(max = if (layout.isCompact) 300.dp else 360.dp)
-            .background(MotifSurface.copy(alpha = 0.95f), RoundedCornerShape(8.dp))
-            .border(1.dp, MotifFocusNeon.copy(alpha = 0.54f), RoundedCornerShape(8.dp))
+            .background(MotifSurface.copy(alpha = 0.92f), RoundedCornerShape(10.dp))
+            .border(0.5.dp, MotifFocusNeon.copy(alpha = 0.15f), RoundedCornerShape(10.dp))
             .padding(horizontal = if (layout.isCompact) 14.dp else 16.dp, vertical = 13.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -269,8 +269,8 @@ private fun StreamFailureNotification(
             Text(
                 text = "Stream failed",
                 color = Color.White,
-                fontSize = if (layout.isCompact) 14.sp else 15.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = if (layout.isCompact) 13.sp else 14.sp,
+                fontWeight = FontWeight.Medium
             )
 
             Text(

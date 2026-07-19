@@ -1,6 +1,26 @@
+<<<<<<< HEAD
 {
   "rewrites": [
     { "source": "/update.json", "destination": "/update.json" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
+=======
+  {
+    "version": 2,
+    "framework": null,
+    "buildCommand": null,
+    "devCommand": null,
+    "installCommand": "npm install",
+    "regions": ["iad1"],
+    "functions": {
+      "api/*.js": {
+        "maxDuration": 10
+      }
+    },
+    "rewrites": [
+      { "source": "/api/activate", "destination": "/api/activate.js" },
+      { "source": "/api/activate/(.*)", "destination": "/api/activate.js" }
+    ]
+  }
+>>>>>>> 8f45380 (feat: refresh StreamNav UI and add licensing foundation)

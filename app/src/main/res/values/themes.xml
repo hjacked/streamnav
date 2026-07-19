@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.StreamNav" parent="android:style/Theme.Material.NoActionBar">
-        <item name="android:windowBackground">@color/kftv_black</item>
-        <item name="android:colorAccent">@color/kftv_gold</item>
-        <item name="android:statusBarColor">@color/kftv_black</item>
-        <item name="android:navigationBarColor">@color/kftv_black</item>
+        <item name="android:windowBackground">@color/sn_black</item>
+        <item name="android:colorAccent">@color/sn_cyan</item>
+        <item name="android:statusBarColor">@color/sn_black</item>
+        <item name="android:navigationBarColor">@color/sn_black</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>

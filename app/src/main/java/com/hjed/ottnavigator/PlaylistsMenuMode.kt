@@ -19,7 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -213,7 +216,7 @@ fun PlaylistsMenuMode(
                 },
             colors = ButtonDefaults.buttonColors(containerColor = MotifFocusNeon)
         ) {
-            Text("Add Playlist", color = Color.Black, fontWeight = FontWeight.Bold)
+            Text("Add Playlist", color = Color.Black, fontWeight = FontWeight.SemiBold)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -261,14 +264,21 @@ fun PlaylistsMenuMode(
                             }
                         }
                         .focusable()
+                        .drawBehind {
+                            val accentColor = if (isFocused) MotifFocusNeon else if (isActive) MotifAccent else Color.Transparent
+                            if (accentColor != Color.Transparent) {
+                                drawLine(
+                                    color = accentColor,
+                                    start = Offset(0f, size.height * 0.15f),
+                                    end = Offset(0f, size.height * 0.85f),
+                                    strokeWidth = 2.5.dp.toPx(),
+                                    cap = StrokeCap.Round
+                                )
+                            }
+                        }
                         .background(
-                            color = if (isFocused) MotifSurface else if (isActive) MotifHighlightPlaying else Color.Transparent,
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .border(
-                            width = if (isFocused) 2.dp else 0.dp,
-                            color = if (isFocused) MotifFocusNeon else Color.Transparent,
-                            shape = RoundedCornerShape(6.dp)
+                            color = if (isFocused) MotifFocusNeon.copy(alpha = 0.06f) else Color.Transparent,
+                            shape = RoundedCornerShape(4.dp)
                         )
                         .combinedClickable(
                             onClick = {
@@ -282,15 +292,15 @@ fun PlaylistsMenuMode(
                                 }
                             }
                         )
-                        .padding(horizontal = 8.dp, vertical = 12.dp),
+                        .padding(start = 10.dp, end = 8.dp, top = 10.dp, bottom = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = playlist.name,
                         color = if (isFocused || isActive) MotifFocusNeon else Color.White,
-                        fontWeight = if (isFocused || isActive) FontWeight.Bold else FontWeight.Normal,
-                        fontSize = 16.sp
+                        fontWeight = if (isFocused || isActive) FontWeight.Medium else FontWeight.Normal,
+                        fontSize = 14.sp
                     )
 
                     if (playlist.id != "default") {
