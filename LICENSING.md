@@ -41,7 +41,7 @@ you mint are accepted by the server.
 ## Activation server (`api/activate.js`)
 
 Deploy this Vercel serverless function alongside your existing `update.json` endpoint
-(same project/domain, e.g. `kinsfolktv.vercel.app`).
+(same project/domain, `streamnav.huetechonline.com`).
 
 ### Endpoints
 
@@ -80,7 +80,7 @@ then persists:
 ```powershell
 $body = @{ key = "STNWDHYKTNQH0SBCA63FQISR" } | ConvertTo-Json
 Invoke-RestMethod -Method Post `
-  -Uri "https://kinsfolktv.vercel.app/api/activate?action=revoke" `
+  -Uri "https://streamnav.huetechonline.com/api/activate?action=revoke" `
   -Headers @{ "x-revoke-token" = $env:REVOKE_TOKEN } `
   -ContentType "application/json" `
   -Body $body

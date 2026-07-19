@@ -27,7 +27,7 @@ object UpdateManager {
     suspend fun getLatestVersion(): UpdateInfo? {
         return withContext(Dispatchers.IO) {
             try {
-                val connection = (URL("https://kinsfolktv.vercel.app/update.json").openConnection() as HttpURLConnection).apply {
+                val connection = (URL("https://streamnav.huetechonline.com/update.json").openConnection() as HttpURLConnection).apply {
                     connectTimeout = 5_000
                     readTimeout = 5_000
                 }

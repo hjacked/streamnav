@@ -22,9 +22,9 @@ object LicenseManager {
     private const val KEY_ACTIVATION = "activation_key"
     private const val KEY_ACTIVATED = "activated"
 
-    private const val ACTIVATION_ENDPOINT = "https://kinsfolktv.vercel.app/api/activate"
+    private const val ACTIVATION_ENDPOINT = "https://streamnav.huetechonline.com/api/activate"
 
-    const val TRIAL_DAYS = 15L
+    const val TRIAL_DAYS = 0L
     private val TRIAL_DURATION_MS = TimeUnit.DAYS.toMillis(TRIAL_DAYS)
 
     private fun prefs(context: Context) =
